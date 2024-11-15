@@ -1,3 +1,13 @@
+<?php 
+session_start();
+
+// redirect user to login if session is not set
+if(!isset($_SESSION['user_id'])){
+    header('Location: login.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,154 +16,7 @@
     <title>Finance Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Animation Classes */
-        .fade-in {
-            animation: fadeIn 1s ease-in;
-        }
-
-        .slide-up {
-            animation: slideUp 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* Card Styling */
-        .hover-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .hover-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-        }
-
-        /* Progress Bars */
-        .progress {
-            height: 10px;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-        }
-
-        .progress-bar {
-            background-color: #007bff;
-        }
-
-        /* Transaction List */
-        .transaction-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .transaction-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s ease;
-        }
-
-        .transaction-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        /* Welcome Section */
-        .welcome-section {
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 15px;
-        }
-
-        /* Charts */
-        canvas {
-            min-height: 300px;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        /* Navbar Styling */
-        .navbar {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            padding: 1rem 2rem;
-        }
-
-        .navbar-brand {
-            color: white !important;
-            font-weight: bold;
-        }
-
-        .nav-link {
-            color: rgba(255,255,255,0.9) !important;
-        }
-
-        .nav-link:hover {
-            color: white !important;
-        }
-
-        .goal-progress {
-            position: relative;
-        }
-
-        .goal-progress .percentage {
-            position: absolute;
-            right: 10px;
-            font-size: 0.8em;
-            color: #666;
-        }
-
-        .transaction-success {
-            animation: slideInRight 0.5s ease-out;
-            background-color: #d4edda;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            animation: slideInRight 0.5s ease-out;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-light">
     <!-- Navbar -->
