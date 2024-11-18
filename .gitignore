@@ -1,0 +1,6 @@
+.env
+vendor/
+.htaccess
+composer.lock
+composer.json
+composer.phar

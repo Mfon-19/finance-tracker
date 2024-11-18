@@ -3,7 +3,7 @@ session_start();
 
 // redirect user to login if session is not set
 if(!isset($_SESSION['user_id'])){
-    header('Location: login.php');
+    header('Location: /login');
     exit();
 }
 ?>
@@ -16,13 +16,13 @@ if(!isset($_SESSION['user_id'])){
     <title>Finance Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="bg-light">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="/">
                 <i class="fas fa-wallet me-2"></i>
                 FinanceTracker
             </a>
@@ -32,22 +32,22 @@ if(!isset($_SESSION['user_id'])){
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="/dashboard">
                             <i class="fas fa-home me-1"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.html">
+                        <a class="nav-link" href="/dashboard">
                             <i class="fas fa-chart-line me-1"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="reports.html">
+                        <a class="nav-link" href="/reports">
                             <i class="fas fa-chart-bar me-1"></i> Reports
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="handleSignOut()">
+                        <a class="nav-link" href="/logout">
                             <i class="fas fa-sign-out-alt me-1"></i> Sign Out
                         </a>
                     </li>

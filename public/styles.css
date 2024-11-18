@@ -99,11 +99,11 @@
     }
 }
 
-/* Add these styles to match index.html */
+/* Add these styles to match index.html
 body {
     padding-top: 76px;
-    /* To account for fixed navbar */
-}
+    To account for fixed navbar
+} */
 
 /* Footer Styles */
 .footer {

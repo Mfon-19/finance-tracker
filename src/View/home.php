@@ -6,7 +6,7 @@
     <title>FinanceTracker - Your Personal Finance Partner</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
@@ -26,10 +26,10 @@
                         <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
+                        <a class="nav-link" href="/dashboard"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="reports.html"> <i class="fas fa-chart-bar me-1"></i> Reports </a>
+                        <a class="nav-link" href="/reports"><i class="fas fa-chart-bar me-1"></i> Reports </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
@@ -44,7 +44,7 @@
         <div class="container">
             <h1 class="display-4 mb-4 fade-in">Take Control of Your Finances</h1>
             <p class="lead mb-4">Track expenses, set budgets, and achieve your financial goals with FinanceTracker</p>
-            <a href="dashboard.php" class="btn btn-primary btn-lg me-3">Get Started</a>
+            <a href="/dashboard" class="btn btn-primary btn-lg me-3">Get Started</a>
             <a href="#features" class="btn btn-outline-light btn-lg">Learn More</a>
         </div>
     </section>
