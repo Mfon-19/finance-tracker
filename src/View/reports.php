@@ -80,7 +80,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Income</h6>
-                        <h3 class="text-success">$5,500</h3>
+                        <h3 class="text-success">$<?php echo $income['total_income']; ?></h3>
                         <p class="mb-0 text-success"><i class="fas fa-arrow-up"></i> 12% vs last period</p>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Expenses</h6>
-                        <h3 class="text-danger">$3,300</h3>
+                            <h3 class="text-danger">$<?php echo $expenses['total_expenses']; ?></h3>
                         <p class="mb-0 text-danger"><i class="fas fa-arrow-up"></i> 5% vs last period</p>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h6 class="text-muted">Net Savings</h6>
-                        <h3 class="text-primary">$2,200</h3>
+                        <h3 class="text-primary">$<?php echo $income['total_income'] - $expenses['total_expenses']; ?></h3>
                         <p class="mb-0 text-primary"><i class="fas fa-arrow-up"></i> 8% vs last period</p>
                     </div>
                 </div>
@@ -145,12 +145,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach($topCategories as $category): ?>
                                     <tr>
-                                        <td>Housing</td>
-                                        <td>$1,200</td>
-                                        <td>36%</td>
+                                        <td><?php echo $category['category']; ?></td>
+                                        <td>$<?php echo $category['total_amount']; ?></td>
+                                        <td><?php echo ($category['total_amount'] / $expenses['total_expenses']) * 100; ?>%</td>
                                     </tr>
-                                    <!-- Add more rows -->
+                                    <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -162,7 +163,20 @@
                     <div class="card-body">
                         <h5 class="card-title">Goals Progress</h5>
                         <div class="goals-progress">
-                            <!-- Keep your existing goals progress items -->
+                            <?php foreach ($goals as $goal): ?>
+                                <div class="goal-item mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span><?php echo $goal['name']; ?></span>
+                                        <span>$<?php echo $goal['currentAmount']; ?> / $<?php echo $goal['targetAmount']; ?></span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                            role="progressbar" 
+                                            style="width: <?php echo ($goal['currentAmount'] / $goal['targetAmount']) * 100; ?>%">
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -185,21 +199,33 @@
                                         <th>Amount</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody>
+                                    <?php foreach($transactions as $transaction): ?>
+                                    <tr>
+                                        <td><?php echo $transaction['transaction_date']; ?></td>
+                                        <td><span class="badge bg-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>"><?php echo $transaction['transaction_type']; ?></span></td>
+                                        <td><?php echo $transaction['category']; ?></td>
+                                        <td><?php echo $transaction['description'] || '-'; ?></td>
+                                        <td class="text-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>">
+                                            <?php echo $transaction['transaction_type'] === 'income' ? '+' : '-'; ?>$<?php echo $transaction['amount']; ?>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12">
+            <!-- <div class="col-12">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Savings Goals Progress</h5>
                         <div id="goalsContainer"></div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -207,6 +233,28 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        <?php 
+            $transactionRows = is_array($transactions) ? $transactions : $transactions->fetch_all(MYSQLI_ASSOC);
+            $incomeAmounts = array_column(
+                array_filter($transactionRows, function($t) { 
+                    return $t['transaction_type'] === 'income'; 
+                }), 
+                'amount'
+            );
+            $expensesAmounts = array_column(
+                array_filter($transactions, function($t) { 
+                    return $t['transaction_type'] === 'expense'; 
+                }), 
+                'amount'
+            );
+            $expensesLabels = array_column(
+                array_filter($transaction, function($t){
+                    return $t['transaction_type'] === 'expense';
+                }),
+                'category'
+            );
+
+        ?>
         // Initialize charts
         document.addEventListener('DOMContentLoaded', function() {
             // Common chart options
@@ -221,7 +269,8 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                     datasets: [{
                         label: 'Income',
-                        data: [4500, 5000, 5500, 5200, 5700, 5500],
+                        // get all income amounts from transactions table
+                        data: <?php echo json_encode($incomeAmounts); ?>,
                         borderColor: '#198754',
                         backgroundColor: 'rgba(25, 135, 84, 0.1)',
                         fill: true,
@@ -229,7 +278,8 @@
                         borderWidth: 2
                     }, {
                         label: 'Expenses',
-                        data: [3000, 3200, 3100, 3400, 3300, 3300],
+                        // get all expenses amounts from transactions table
+                        data: <?php echo json_encode($expensesAmounts); ?>,
                         borderColor: '#dc3545',
                         backgroundColor: 'rgba(220, 53, 69, 0.1)',
                         fill: true,
@@ -276,9 +326,9 @@
             new Chart(expenseCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Housing', 'Food', 'Transport', 'Utilities', 'Others'],
+                    labels: <?php echo json_encode($expensesLabels); ?>,
                     datasets: [{
-                        data: [1200, 800, 600, 400, 300],
+                        data: <?php echo json_encode($expensesAmounts); ?>,
                         backgroundColor: [
                             'rgba(13, 110, 253, 0.8)',
                             'rgba(102, 16, 242, 0.8)',
@@ -314,51 +364,6 @@
                     },
                     cutout: '65%'
                 }
-            });
-
-            // Load and display all transactions
-            const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-            const tbody = document.querySelector('#transactionsTable tbody');
-            
-            transactions.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(transaction => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
-                    <td><span class="badge bg-${transaction.type === 'income' ? 'success' : 'danger'}">${transaction.type}</span></td>
-                    <td>${transaction.category}</td>
-                    <td>${transaction.description || '-'}</td>
-                    <td class="text-${transaction.type === 'income' ? 'success' : 'danger'}">
-                        ${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Load and display all goals
-            const goals = JSON.parse(localStorage.getItem('goals') || '[]');
-            const goalsContainer = document.getElementById('goalsContainer');
-            
-            goals.forEach(goal => {
-                const progress = (goal.currentAmount / goal.targetAmount) * 100;
-                const goalDiv = document.createElement('div');
-                goalDiv.className = 'mb-4';
-                goalDiv.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h6 class="mb-0">${goal.name}</h6>
-                        <span class="text-muted">Target Date: ${new Date(goal.date).toLocaleDateString()}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-1">
-                        <span>Progress: $${goal.currentAmount.toFixed(2)} / $${goal.targetAmount.toFixed(2)}</span>
-                        <span>${progress.toFixed(1)}%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                             role="progressbar" 
-                             style="width: ${progress}%">
-                        </div>
-                    </div>
-                `;
-                goalsContainer.appendChild(goalDiv);
             });
         });
     </script>

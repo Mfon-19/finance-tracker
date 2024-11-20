@@ -49,18 +49,32 @@ $router->map('POST', '/signup', function() use ($conn) {
 
 // Dashboard route to display the dashboard
 $router->map('GET', '/dashboard', function() use ($conn) {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+        exit();
+    }
     $controller = new \App\Controller\DashboardController($conn);
-    $controller->index();
+    $controller->showDashboard($_SESSION['user_id']);
 });
 
 $router->map('GET', '/reports', function() use ($conn) {
     $controller = new \App\Controller\ReportsController($conn);
-    $controller->index();
+    $controller->showReports($_SESSION['user_id']);
 });
 
 $router->map('GET', '/logout', function() use ($conn) {
     $controller = new \App\Controller\AuthController($conn);
     $controller->logout();
+});
+
+$router->map('POST', '/add-transaction', function() use ($conn) {
+    $controller = new \App\Controller\DashboardController($conn);
+    $controller->addTransaction($_SESSION['user_id'], $_POST['amount'], $_POST['type'], $_POST['category'], $_POST['description'], $_POST['date']);
+});
+
+$router->map('POST', '/add-goal', function() use ($conn) {
+    $controller = new \App\Controller\DashboardController($conn);
+    $controller->addGoal($_SESSION['user_id'], $_POST['goalName'], $_POST['targetAmount'], $_POST['targetDate']);
 });
 
 $match = $router->match();

@@ -6,9 +6,11 @@ use App\Model\User;
 
 class AuthController {
     private $conn;
+    private $userModel;
 
     public function __construct($conn) {
         $this->conn = $conn;
+        $this->userModel = new User($conn);
     }
 
     public function login() {
@@ -20,11 +22,10 @@ class AuthController {
     }
 
     public function loginSubmit() {
-        $userModel = new User($this->conn);
-        $user = $userModel->login(htmlspecialchars($_POST['username']), htmlspecialchars($_POST['password']));
+        $user = $this->userModel->login(htmlspecialchars($_POST['username']));
         if($user && password_verify($_POST['password'], $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['firstname'] = $user['firstname'];
+            $_SESSION['first_name'] = $user['first_name'];
             header('Location: /dashboard');
         } else {
             echo 'Invalid username or password';
@@ -32,8 +33,7 @@ class AuthController {
     }
 
     public function signupSubmit() {
-        $userModel = new User($this->conn);
-        $result = $userModel->signup($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['phone'], $_POST['username'], $_POST['password']);
+        $result = $this->userModel->signup($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['phone'], $_POST['username'], $_POST['password']);
         if($result) {
             header('Location: /dashboard');
         } else {
