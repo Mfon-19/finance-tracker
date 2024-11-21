@@ -32,7 +32,7 @@ class User {
     }
 
     public function getTransactionsById($id, $limit = 3){
-        $sql = "SELECT * FROM transactions WHERE user_id = $id ORDER BY transaction_date DESC LIMIT $limit";
+        $sql = "SELECT * FROM transactions WHERE user_id = $id ORDER BY transaction_date ASC LIMIT $limit";
         $transactions = $this->conn->query($sql);
         return $transactions;
     }
@@ -55,8 +55,8 @@ class User {
         return $totalExpenses->fetch_assoc();
     }
 
-    public function getTopCategoriesById($id){
-        $sql = "SELECT category, COALESCE(SUM(amount), 0) AS total_amount FROM transactions WHERE user_id = $id GROUP BY category ORDER BY total_amount DESC LIMIT 5";
+    public function getTopExpenseCategoriesById($id){
+        $sql = "SELECT category, COALESCE(SUM(amount), 0) AS total_amount FROM transactions WHERE user_id = $id AND transaction_type = 'expense' GROUP BY category ORDER BY total_amount DESC LIMIT 5";
         $topCategories = $this->conn->query($sql);
         return $topCategories;
     }

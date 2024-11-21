@@ -145,11 +145,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!--$category = {(category, total_amount)} -->
                                     <?php foreach($topCategories as $category): ?>
                                     <tr>
                                         <td><?php echo $category['category']; ?></td>
                                         <td>$<?php echo $category['total_amount']; ?></td>
-                                        <td><?php echo ($category['total_amount'] / $expenses['total_expenses']) * 100; ?>%</td>
+                                        <td>
+                                            <?php $catAmt = $category['total_amount']; echo ( number_format(($catAmt / $expenses['total_expenses']), 2, '.', '')) * 100; ?>%
+                                        </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -166,13 +169,13 @@
                             <?php foreach ($goals as $goal): ?>
                                 <div class="goal-item mb-3">
                                     <div class="d-flex justify-content-between">
-                                        <span><?php echo $goal['name']; ?></span>
-                                        <span>$<?php echo $goal['currentAmount']; ?> / $<?php echo $goal['targetAmount']; ?></span>
+                                        <span><?php echo $goal['goal_name']; ?></span>
+                                        <span>$<?php echo $goal['current_amount']; ?> / $<?php echo $goal['target_amount']; ?></span>
                                     </div>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" 
                                             role="progressbar" 
-                                            style="width: <?php echo ($goal['currentAmount'] / $goal['targetAmount']) * 100; ?>%">
+                                            style="width: <?php echo ($goal['current_amount'] / $goal['target_amount']) * 100; ?>%">
                                         </div>
                                     </div>
                                 </div>
@@ -204,7 +207,7 @@
                                     <tr>
                                         <td><?php echo $transaction['transaction_date']; ?></td>
                                         <td><span class="badge bg-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>"><?php echo $transaction['transaction_type']; ?></span></td>
-                                        <td><?php echo $transaction['category']; ?></td>
+                                        <td><?php echo ucwords($transaction['category']); ?></td>
                                         <td><?php echo $transaction['description'] || '-'; ?></td>
                                         <td class="text-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>">
                                             <?php echo $transaction['transaction_type'] === 'income' ? '+' : '-'; ?>$<?php echo $transaction['amount']; ?>
@@ -234,25 +237,33 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         <?php 
+            // Reset the result pointer to the beginning
+            $transactions->data_seek(0);
+            
             $transactionRows = is_array($transactions) ? $transactions : $transactions->fetch_all(MYSQLI_ASSOC);
+            
             $incomeAmounts = array_column(
                 array_filter($transactionRows, function($t) { 
                     return $t['transaction_type'] === 'income'; 
                 }), 
                 'amount'
             );
+            $transactions->data_seek(0);
             $expensesAmounts = array_column(
-                array_filter($transactions, function($t) { 
+                array_filter($transactionRows, function($t) { 
                     return $t['transaction_type'] === 'expense'; 
                 }), 
                 'amount'
             );
+            $transactions->data_seek(0);
             $expensesLabels = array_column(
-                array_filter($transaction, function($t){
+                array_filter($transactionRows, function($t){
                     return $t['transaction_type'] === 'expense';
                 }),
                 'category'
             );
+
+            
 
         ?>
         // Initialize charts
@@ -270,7 +281,7 @@
                     datasets: [{
                         label: 'Income',
                         // get all income amounts from transactions table
-                        data: <?php echo json_encode($incomeAmounts); ?>,
+                        data: <?php echo $incomeAmounts; ?>, 
                         borderColor: '#198754',
                         backgroundColor: 'rgba(25, 135, 84, 0.1)',
                         fill: true,

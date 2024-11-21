@@ -16,7 +16,7 @@ class ReportsController {
         $income = $this->user->getTotalIncomeById($id);
         $expenses = $this->user->getTotalExpensesById($id);
         $goals = $this->user->getGoalsById($id);
-        $topCategories = $this->user->getTopCategoriesById($id);
+        $topCategories = $this->user->getTopExpenseCategoriesById($id);
         require_once __DIR__ . '/../../src/View/reports.php';
     }
 }
