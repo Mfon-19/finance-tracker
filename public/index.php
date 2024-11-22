@@ -77,6 +77,11 @@ $router->map('POST', '/add-goal', function() use ($conn) {
     $controller->addGoal($_SESSION['user_id'], $_POST['goalName'], $_POST['targetAmount'], $_POST['targetDate']);
 });
 
+$router->map('POST', '/edit-goal', function() use ($conn) {
+    $controller = new \App\Controller\DashboardController($conn);
+    $controller->editGoal($_POST['goal-id'], $_POST['amount'], $_POST['goal-name']);
+});
+
 $match = $router->match();
 
 if($match) {

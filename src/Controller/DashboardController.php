@@ -37,4 +37,10 @@ class DashboardController {
             echo 'Error adding goal';
         }
     }
+
+    public function editGoal($id, $amount, $name){
+        $result = $this->userModel->editGoal($id, $amount, $name);
+        if(!$result) echo 'Error editing goal';
+        header('Location: /dashboard');
+    }
 }

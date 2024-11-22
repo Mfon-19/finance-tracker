@@ -1,8 +1,8 @@
-<?php 
+<?php
 session_start();
 
 // redirect user to login if session is not set
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_id'])) {
     header('Location: /login');
     exit();
 }
@@ -137,46 +137,23 @@ if(!isset($_SESSION['user_id'])){
                             </div>
                             <div class="transaction-list">
                             <?php foreach ($transactions as $transaction): ?>
-                                <div class="transaction-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas <?php echo $transaction['transaction_type'] == 'expense' ? 'fa-minus-circle text-danger' : 'fa-plus-circle text-success'; ?>"></i>
-                                        <span><?php echo ucwords($transaction['category']); ?></span>
-                                    </div>
-                                    <span class="<?php echo $transaction['transaction_type'] == 'expense' ? 'text-danger' : 'text-success'; ?>">
-                                        $<?php echo $transaction['amount']; ?>
-                                    </span>
+                            <div class="transaction-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="fas <?php echo $transaction['transaction_type'] == 'expense' ? 'fa-minus-circle text-danger' : 'fa-plus-circle text-success'; ?>"></i>
+                                    <span><?php echo ucwords($transaction['category']); ?></span>
                                 </div>
+                                <span class="<?php echo $transaction['transaction_type'] == 'expense' ? 'text-danger' : 'text-success'; ?>">
+                                    $<?php echo $transaction['amount']; ?>
+                                </span>
+                            </div>
                             <?php endforeach; ?>
                             </div>
-                            <!-- <div class="transaction-list">
-                                <div class="transaction-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-minus-circle text-danger"></i>
-                                        <span>Groceries</span>
-                                    </div>
-                                    <span class="text-danger">$150.00</span>
-                                </div>
-                                <div class="transaction-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-plus-circle text-success"></i>
-                                        <span>Salary</span>
-                                    </div>
-                                    <span class="text-success">$3,000.00</span>
-                                </div>
-                                <div class="transaction-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-minus-circle text-danger"></i>
-                                        <span>Utilities</span>
-                                    </div>
-                                    <span class="text-danger">$200.00</span>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm" id="goalsContainer">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h5 class="card-title mb-0">Savings Goals</h5>
@@ -185,44 +162,67 @@ if(!isset($_SESSION['user_id'])){
                                 </button>
                             </div>
                             <?php foreach ($goals as $goal): ?>
-                                <div class="goal-item mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <span><?php echo $goal['goal_name']; ?></span>
-                                        <span>$<?php echo $goal['current_amount']; ?> / $<?php echo $goal['target_amount']; ?></span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                            role="progressbar" 
-                                            style="<?php ?>width: <?php echo ($goal['current_amount'] / $goal['target_amount']) * 100; ?>%">
+                                <div class="d-flex flex-row goal-item mb-3">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span><?php echo $goal['goal_name']; ?></span>
+                                            <span>$<?php echo $goal['current_amount']; ?> / $<?php echo $goal['target_amount']; ?></span>
+                                        </div>
+                                        <div class="progress flex-grow-1">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                role="progressbar" 
+                                                style="<?php ?>width: <?php echo ($goal['current_amount'] / $goal['target_amount']) * 100; ?>%">
+                                            </div>
                                         </div>
                                     </div>
+                                    <button class="ms-3 goal" id="editGoalBtn" data-bs-toggle="modal" data-bs-target="#editGoalModal" data-goal-name="<?php echo $goal['goal_name'] ?>" data-goal-current-amount="<?php echo $goal['current_amount'] ?>" data-goal-target-amount="<?php echo $goal['target_amount'] ?>" data-goal-id="<?php echo $goal['goal_id'] ?>">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             <?php endforeach; ?>
-                            <!-- <div class="goal-item mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>New Car</span>
-                                    <span>$15,000 / $30,000</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                        role="progressbar" 
-                                        style="width: 50%">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="goal-item mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Vacation</span>
-                                    <span>$2,000 / $5,000</span>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                        role="progressbar" 
-                                        style="width: 40%">
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Goal Modal -->
+        <div class="modal fade" id="editGoalModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Money Towards Goal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="goalForm" action="/edit-goal" method="POST">
+                            <input type="hidden" name="goal-id" id="goalIdContainer">
+                            <div class="mb-3">
+                                <label class="form-label">Goal Name</label>
+                                <input type="hidden" name="goal-name" id="goalNameContainer">
+                                <h3 id="editGoalName"></h3>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Amount To Go</label>
+                                <h3 id="editGoalCurrentAmount"></h3>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Current Account Balance</label>
+                                <h3 id="currentAmount">$</h3>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Amount To Add</label>
+                                <input type="number" class="form-control" name="amount" step="0.01" max="<?php echo number_format($balance, 2, '.', ''); ?>" id="amountToAdd" required>
+                            </div>
+                            <button type="submit" style="display:none" id="submitEditGoalButton"></button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick={submitEditGoal()} id="editModalSubmitBtn">Save Edit</button>
                     </div>
                 </div>
             </div>
@@ -265,6 +265,44 @@ if(!isset($_SESSION['user_id'])){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        const goalsContainer = document.getElementById('goalsContainer');
+        goalsContainer.addEventListener('click', (e) => {
+            // Find the closest button with class 'goal' (handles clicking on SVG or path elements)
+            const goalButton = e.target.closest('.goal');
+            if (!goalButton) return;
+
+            const editGoalName = document.getElementById('editGoalName');
+            const editGoalCurrentAmount = document.getElementById('editGoalCurrentAmount');
+            const goalIdContainer = document.getElementById('goalIdContainer');
+            const goalNameContainer = document.getElementById('goalNameContainer');
+
+            const goalName = goalButton.getAttribute('data-goal-name');
+            const goalAmountToGo = Number(goalButton.getAttribute('data-goal-target-amount')) - 
+                                  Number(goalButton.getAttribute('data-goal-current-amount'));
+            const goalId = Number(goalButton.getAttribute('data-goal-id'));
+            const currentAmount = document.getElementById('currentAmount');
+
+            editGoalName.innerText = goalName;
+            editGoalCurrentAmount.innerText = `$${goalAmountToGo.toFixed(2)}`;
+            goalIdContainer.value = goalId;
+            goalNameContainer.value = goalName;
+            currentAmount.innerText = "$<?php echo number_format($balance, 2, '.', ''); ?>";
+        });
+
+
+        const editModalSubmitBtn = document.getElementById('editModalSubmitBtn');
+        const amountToAdd = document.getElementById('amountToAdd');
+        amountToAdd.addEventListener('input', () => {
+            const balance = parseFloat(currentAmount.innerText.replace('$', ''));
+            const amount = parseFloat(amountToAdd.value);
+            
+            if (amount > <?php echo $balance ?> || amount <= 0) {
+                editModalSubmitBtn.disabled = true;
+            } else {
+                editModalSubmitBtn.disabled = false;
+            }
+        });
+
         // Counter Animation
         const counters = document.querySelectorAll('.counter');
         counters.forEach(counter => {
@@ -485,6 +523,11 @@ if(!isset($_SESSION['user_id'])){
         function submitGoal() {
             const goalButton = document.getElementById('submitGoalButton');
             goalButton.click();
+        }
+
+        function submitEditGoal() {
+            const editGoalBtn = document.getElementById('submitEditGoalButton');
+            editGoalBtn.click();
         }
 
         // Initialize tooltips

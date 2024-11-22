@@ -12,7 +12,7 @@ class ReportsController {
     }
 
     public function showReports($id) {
-        $transactions = $this->user->getTransactionsById($id);
+        $transactions = $this->user->getTransactionsById($id, 10);
         $income = $this->user->getTotalIncomeById($id);
         $expenses = $this->user->getTotalExpensesById($id);
         $goals = $this->user->getGoalsById($id);

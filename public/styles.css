@@ -247,6 +247,15 @@ canvas {
     color: #666;
 }
 
+#editGoalBtn {
+    border: none;
+    background-color: inherit;
+}
+
+#editGoalBtn:hover {
+    cursor: pointer;
+}
+
 .transaction-success {
     animation: slideInRight 0.5s ease-out;
     background-color: #d4edda;
