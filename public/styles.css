@@ -182,8 +182,18 @@ body {
     transition: background-color 0.2s ease;
 }
 
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
 .transaction-item:hover {
     background-color: #f8f9fa;
+}
+
+/* Savings Goals Container */
+.goals-container{
+    max-height: 221px;
+    overflow-y: auto;
 }
 
 /* Welcome Section */

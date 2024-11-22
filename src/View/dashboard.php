@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body class="bg-light">
     <main class="d-flex flex-column">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="/">
                     <i class="fas fa-wallet me-2"></i>
@@ -153,7 +153,7 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
                 
                 <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm" id="goalsContainer">
+                    <div class="card shadow-sm goals-container" id="goalsContainer">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h5 class="card-title mb-0">Savings Goals</h5>

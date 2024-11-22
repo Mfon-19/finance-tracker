@@ -241,50 +241,24 @@
             $transactions->data_seek(0);
             
             $transactionRows = is_array($transactions) ? $transactions : $transactions->fetch_all(MYSQLI_ASSOC);
-            
-            $incomeAmounts = array_column(
-                array_filter($transactionRows, function($t) { 
-                    return $t['transaction_type'] === 'income'; 
-                }), 
-                'amount'
-            );
-            $expensesAmounts = array_column(
-                array_filter($transactionRows, function($t) { 
-                    return $t['transaction_type'] === 'expense'; 
-                }), 
-                'amount'
-            );
-            $expensesLabels = array_column(
-                array_filter($transactionRows, function($t){
-                    return $t['transaction_type'] === 'expense';
-                }),
-                'category'
-            );
-
-            $months = array_map(function($date) {
-                return date('M', strtotime($date));
-            }, array_column($transactionRows, 'transaction_date'));
 
             $monthlyData = [];
-    foreach ($transactionRows as $row) {
-        $month = date('M Y', strtotime($row['transaction_date']));
-        if (!isset($monthlyData[$month])) {
-            $monthlyData[$month] = ['income' => 0, 'expense' => 0];
-        }
-        if ($row['transaction_type'] === 'income') {
-            $monthlyData[$month]['income'] += $row['amount'];
-        } else {
-            $monthlyData[$month]['expense'] += $row['amount'];
-        }
-    }
+            foreach ($transactionRows as $row) {
+                $month = date('M Y', strtotime($row['transaction_date']));
+                if (!isset($monthlyData[$month])) {
+                    $monthlyData[$month] = ['income' => 0, 'expense' => 0];
+                }
+                if ($row['transaction_type'] === 'income') {
+                    $monthlyData[$month]['income'] += $row['amount'];
+                } else {
+                    $monthlyData[$month]['expense'] += $row['amount'];
+                }
+            }
 
-    // Sort by date
-    //ksort($monthlyData);
-
-    // Prepare the arrays for the chart
-    $months = array_keys($monthlyData);
-    $incomeAmounts = array_column($monthlyData, 'income');
-    $expensesAmounts = array_column($monthlyData, 'expense');
+            // Prepare the arrays for the chart
+            $months = array_keys($monthlyData);
+            $incomeAmounts = array_column($monthlyData, 'income');
+            $expensesAmounts = array_column($monthlyData, 'expense');
         ?>
         // Initialize charts
         document.addEventListener('DOMContentLoaded', function() {
