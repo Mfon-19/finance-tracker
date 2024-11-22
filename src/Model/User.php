@@ -95,30 +95,6 @@ class User {
         $stmt->close();
         return $result;
     }
-    // CREATE TABLE transactions (
-    // transaction_id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    // user_id INT(11) NOT NULL,
-    // transaction_type ENUM('income', 'expense') NOT NULL,
-    // amount DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),
-    // category VARCHAR(50) NOT NULL,
-    // description TEXT,
-    // transaction_date DATE NOT NULL,
-    // created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    // updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    // FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    // );
-
-    // CREATE TABLE savings_goals (
-    // goal_id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    // user_id INT(11) NOT NULL,
-    // goal_name VARCHAR(100) NOT NULL,
-    // target_amount DECIMAL(10, 2) NOT NULL CHECK (target_amount >= 0),
-    // current_amount DECIMAL(10, 2) DEFAULT 0 CHECK (current_amount >= 0),
-    // goal_deadline DATE NOT NULL,
-    // created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    // updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    // FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    // );
 
     public function addTransaction($id, $amount, $type, $category, $description, $date){
         $sql = "INSERT INTO transactions (user_id, transaction_type, amount, category, description, transaction_date) VALUES (?, ?, ?, ?, ?, ?)";

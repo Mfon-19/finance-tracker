@@ -81,7 +81,7 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Income</h6>
                         <h3 class="text-success">$<?php echo $income['total_income']; ?></h3>
-                        <p class="mb-0 text-success"><i class="fas fa-arrow-up"></i> 12% vs last period</p>
+                        <!-- <p class="mb-0 text-success"><i class="fas fa-arrow-up"></i> 12% vs last period</p> -->
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Expenses</h6>
                             <h3 class="text-danger">$<?php echo $expenses['total_expenses']; ?></h3>
-                        <p class="mb-0 text-danger"><i class="fas fa-arrow-up"></i> 5% vs last period</p>
+                        <!-- <p class="mb-0 text-danger"><i class="fas fa-arrow-up"></i> 5% vs last period</p> -->
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted">Net Savings</h6>
                         <h3 class="text-primary">$<?php echo $income['total_income'] - $expenses['total_expenses']; ?></h3>
-                        <p class="mb-0 text-primary"><i class="fas fa-arrow-up"></i> 8% vs last period</p>
+                        <!-- <p class="mb-0 text-primary"><i class="fas fa-arrow-up"></i> 8% vs last period</p> -->
                     </div>
                 </div>
             </div>
@@ -281,7 +281,7 @@
                     datasets: [{
                         label: 'Income',
                         // get all income amounts from transactions table
-                        data: <?php echo $incomeAmounts; ?>, 
+                        data: <?php echo json_encode($incomeAmounts); ?>, 
                         borderColor: '#198754',
                         backgroundColor: 'rgba(25, 135, 84, 0.1)',
                         fill: true,

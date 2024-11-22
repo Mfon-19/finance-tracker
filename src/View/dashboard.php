@@ -531,73 +531,10 @@ if (!isset($_SESSION['user_id'])) {
         }
 
         // Initialize tooltips
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Add this JavaScript for sign out functionality
-        // function handleSignOut() {
-        //     // Add sign out logic here
-        //     alert('Signing out...');
-        //     window.location.href = 'index.html';
-        // }
-
-        // Add this function to load existing data when the page loads
-        // function loadExistingData() {
-        //     // Load transactions
-        //     const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-        //     const transactionList = document.querySelector('.transaction-list');
-            
-        //     transactions.sort((a, b) => b.timestamp - a.timestamp).slice(0, 5).forEach(transaction => {
-        //         const transactionDiv = document.createElement('div');
-        //         transactionDiv.className = 'transaction-item d-flex justify-content-between align-items-center';
-                
-        //         const icon = transaction.type === 'income' ? 'plus-circle text-success' : 'minus-circle text-danger';
-        //         const amountClass = transaction.type === 'income' ? 'text-success' : 'text-danger';
-        //         const amountPrefix = transaction.type === 'income' ? '+' : '-';
-
-        //         transactionDiv.innerHTML = `
-        //             <div>
-        //                 <i class="fas fa-${icon}"></i>
-        //                 <span>${transaction.description || transaction.category}</span>
-        //             </div>
-        //             <span class="${amountClass}">${amountPrefix}$${transaction.amount.toFixed(2)}</span>
-        //         `;
-                
-        //         transactionList.appendChild(transactionDiv);
-        //     });
-
-        //     // Load goals
-        //     const goals = JSON.parse(localStorage.getItem('goals') || '[]');
-        //     const goalsContainer = document.querySelector('.card-body .goal-item').parentNode;
-            
-        //     // Clear existing demo goals
-        //     goalsContainer.innerHTML = '';
-
-        //     goals.forEach(goal => {
-        //         const progress = (goal.currentAmount / goal.targetAmount) * 100;
-        //         const goalDiv = document.createElement('div');
-        //         goalDiv.className = 'goal-item mb-3';
-        //         goalDiv.innerHTML = `
-        //             <div class="d-flex justify-content-between">
-        //                 <span>${goal.name}</span>
-        //                 <span>$${goal.currentAmount.toFixed(2)} / $${goal.targetAmount.toFixed(2)}</span>
-        //             </div>
-        //             <div class="progress">
-        //                 <div class="progress-bar progress-bar-striped progress-bar-animated" 
-        //                      role="progressbar" 
-        //                      style="width: ${progress}%">
-        //                 </div>
-        //             </div>
-        //         `;
-                
-        //         goalsContainer.appendChild(goalDiv);
-        //     });
-        // }
-
-        // Call loadExistingData when the page loads
-        // document.addEventListener('DOMContentLoaded', loadExistingData);
+        // const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        // tooltipTriggerList.map(function (tooltipTriggerEl) {
+        //     return new bootstrap.Tooltip(tooltipTriggerEl);
+        // });
     </script>
 </body>
 </html> 
