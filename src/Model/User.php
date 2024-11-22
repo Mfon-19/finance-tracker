@@ -40,8 +40,8 @@ class User {
         return $result->fetch_assoc();
     }
 
-    public function getTransactionsById($id, $limit = 3){
-        $sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date ASC LIMIT ?";
+    public function getTransactionsById($id, $order, $limit = 3){
+        $sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date " . ($order === 'DESC' ? 'DESC' : 'ASC') . " LIMIT ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ii", $id, $limit);
         $stmt->execute();
