@@ -1,7 +1,7 @@
-<header class="w-full">
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<header class="w-full sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <i class="fas fa-wallet me-2"></i>
                 FinanceTracker
             </a>
@@ -11,16 +11,24 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i> Home</a>
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-chart-line me-1"></i> Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="reports.html"> <i class="fas fa-chart-bar me-1"></i> Reports </a>
+                        <a class="nav-link" href="/reports">
+                            <i class="fas fa-chart-bar me-1"></i> Reports
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sign Out
+                        </a>
                     </li>
                 </ul>
             </div>

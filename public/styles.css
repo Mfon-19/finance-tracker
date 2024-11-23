@@ -196,6 +196,11 @@ body {
     overflow-y: auto;
 }
 
+.transactions-container{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 /* Welcome Section */
 .welcome-section {
     padding: 2rem 0;

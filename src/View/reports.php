@@ -9,36 +9,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-light">
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">FinanceTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/reports">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Sign Out</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include 'header.php' ?>
 
     <div class="container py-4">
         <div class="row mb-4">
@@ -130,7 +101,7 @@
         </div>
 
         <!-- Detailed Analysis -->
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -186,7 +157,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row transactions-container">
             <div class="col-12 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -243,6 +214,7 @@
             $transactionRows = is_array($transactions) ? $transactions : $transactions->fetch_all(MYSQLI_ASSOC);
 
             $monthlyData = [];
+            $expensesLabels = [];
             foreach ($transactionRows as $row) {
                 $month = date('M Y', strtotime($row['transaction_date']));
                 if (!isset($monthlyData[$month])) {
@@ -252,6 +224,9 @@
                     $monthlyData[$month]['income'] += $row['amount'];
                 } else {
                     $monthlyData[$month]['expense'] += $row['amount'];
+                    if (!in_array($row['category'], $expensesLabels)) {
+                        $expensesLabels[] = $row['category'];
+                    }
                 }
             }
 
