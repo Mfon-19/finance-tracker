@@ -40,15 +40,33 @@ class User {
         return $result->fetch_assoc();
     }
 
-    public function getTransactionsById($id, $order, $limit = 3){
-        $sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date " . ($order === 'DESC' ? 'DESC' : 'ASC') . " LIMIT ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $id, $limit);
+    public function getTransactionsById($id, $order, $limit, $filter, $startDate, $endDate) {
+        $query = "SELECT * FROM transactions WHERE user_id = ?";
+    
+        // Adjust query based on the filter
+        if ($filter === 'month') {
+            $query .= " AND MONTH(transaction_date) = MONTH(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'quarter') {
+            $query .= " AND QUARTER(transaction_date) = QUARTER(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'year') {
+            $query .= " AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'custom' && $startDate && $endDate) {
+            $query .= " AND transaction_date BETWEEN ? AND ?";
+        }
+    
+        $query .= " ORDER BY transaction_date $order LIMIT $limit";
+        $stmt = $this->conn->prepare($query);
+    
+        if ($filter === 'custom' && $startDate && $endDate) {
+            $stmt->bind_param('iss', $id, $startDate, $endDate);
+        } else {
+            $stmt->bind_param('i', $id);
+        }
+    
         $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
-        return $result;
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+    
 
     public function getCurrentBalanceById($id){
         $income = $this->getTotalIncomeById($id);
@@ -56,25 +74,64 @@ class User {
         return number_format($income['total_income'] - $expense['total_expenses'], 2, '.', '');
     }
 
-    public function getTotalIncomeById($id){
-        $sql = "SELECT COALESCE(SUM(amount), 0) AS total_income FROM transactions WHERE user_id = ? AND transaction_type = 'income'";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
+    public function getTotalIncomeById($id, $filter = null, $startDate = null, $endDate = null) {
+        $query = "SELECT COALESCE(SUM(amount), 0) AS total_income FROM transactions WHERE user_id = ? AND transaction_type = 'income'";
+        
+        // Adjust query based on the filter
+        if ($filter === 'month') {
+            $query .= " AND MONTH(transaction_date) = MONTH(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'quarter') {
+            $query .= " AND QUARTER(transaction_date) = QUARTER(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'year') {
+            $query .= " AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'custom' && $startDate && $endDate) {
+            $query .= " AND transaction_date BETWEEN ? AND ?";
+        }
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // Bind parameters based on the filter
+        if ($filter === 'custom' && $startDate && $endDate) {
+            $stmt->bind_param('iss', $id, $startDate, $endDate);
+        } else {
+            $stmt->bind_param('i', $id);
+        }
+    
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
         return $result->fetch_assoc();
     }
-
-    public function getTotalExpensesById($id){
-        $sql = "SELECT COALESCE(SUM(amount), 0) AS total_expenses FROM transactions WHERE user_id = ? AND transaction_type = 'expense'";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
+    
+    public function getTotalExpensesById($id, $filter = null, $startDate = null, $endDate = null) {
+        $query = "SELECT COALESCE(SUM(amount), 0) AS total_expenses FROM transactions WHERE user_id = ? AND transaction_type = 'expense'";
+        
+        // Adjust query based on the filter
+        if ($filter === 'month') {
+            $query .= " AND MONTH(transaction_date) = MONTH(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'quarter') {
+            $query .= " AND QUARTER(transaction_date) = QUARTER(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'year') {
+            $query .= " AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
+        } elseif ($filter === 'custom' && $startDate && $endDate) {
+            $query .= " AND transaction_date BETWEEN ? AND ?";
+        }
+    
+        $stmt = $this->conn->prepare($query);
+    
+        // Bind parameters based on the filter
+        if ($filter === 'custom' && $startDate && $endDate) {
+            $stmt->bind_param('iss', $id, $startDate, $endDate);
+        } else {
+            $stmt->bind_param('i', $id);
+        }
+    
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
         return $result->fetch_assoc();
     }
+    
 
     public function getTopExpenseCategoriesById($id){
         $sql = "SELECT category, COALESCE(SUM(amount), 0) AS total_amount FROM transactions WHERE user_id = ? AND transaction_type = 'expense' GROUP BY category ORDER BY total_amount DESC LIMIT 5";

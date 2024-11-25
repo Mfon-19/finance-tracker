@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-light">
-    <?php include 'header.php' ?>
+    <?php include 'header.php'; ?>
 
     <div class="container py-4">
         <div class="row mb-4">
@@ -24,26 +24,42 @@
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <select class="form-select">
-                                    <option value="month">This Month</option>
-                                    <option value="quarter">This Quarter</option>
-                                    <option value="year">This Year</option>
-                                    <option value="custom">Custom Range</option>
-                                </select>
+                        <form method="GET" action="">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <select class="form-select" name="filter" id="filter">
+                                        <option value="month" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'month' ? 'selected' : ''; ?>>This Month</option>
+                                        <option value="quarter" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'quarter' ? 'selected' : ''; ?>>This Quarter</option>
+                                        <option value="year" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'year' ? 'selected' : ''; ?>>This Year</option>
+                                        <option value="custom" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'custom' ? 'selected' : ''; ?>>Custom Range</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="date" class="form-control" name="start_date" id="start_date" 
+                                           value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="date" class="form-control" name="end_date" id="end_date" 
+                                           value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <input type="date" class="form-control" placeholder="Start Date">
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">Apply Filter</button>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <input type="date" class="form-control" placeholder="End Date">
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Display Errors -->
+        <?php if (!empty($errorMsg)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo htmlspecialchars($errorMsg); ?>
+            </div>
+        <?php endif; ?>
 
         <!-- Summary Cards -->
         <div class="row mb-4">
@@ -52,7 +68,6 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Income</h6>
                         <h3 class="text-success">$<?php echo $income['total_income']; ?></h3>
-                        <!-- <p class="mb-0 text-success"><i class="fas fa-arrow-up"></i> 12% vs last period</p> -->
                     </div>
                 </div>
             </div>
@@ -60,8 +75,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h6 class="text-muted">Total Expenses</h6>
-                            <h3 class="text-danger">$<?php echo $expenses['total_expenses']; ?></h3>
-                        <!-- <p class="mb-0 text-danger"><i class="fas fa-arrow-up"></i> 5% vs last period</p> -->
+                        <h3 class="text-danger">$<?php echo $expenses['total_expenses']; ?></h3>
                     </div>
                 </div>
             </div>
@@ -70,7 +84,6 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted">Net Savings</h6>
                         <h3 class="text-primary">$<?php echo $income['total_income'] - $expenses['total_expenses']; ?></h3>
-                        <!-- <p class="mb-0 text-primary"><i class="fas fa-arrow-up"></i> 8% vs last period</p> -->
                     </div>
                 </div>
             </div>
@@ -116,13 +129,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!--$category = {(category, total_amount)} -->
                                     <?php foreach($topCategories as $category): ?>
                                     <tr>
                                         <td><?php echo $category['category']; ?></td>
                                         <td>$<?php echo $category['total_amount']; ?></td>
                                         <td>
-                                            <?php $catAmt = $category['total_amount']; echo ( number_format(($catAmt / $expenses['total_expenses']), 2, '.', '')) * 100; ?>%
+                                            <?php 
+                                              $catAmt = $category['total_amount']; 
+                                              echo (number_format(($catAmt / $expenses['total_expenses']), 2, '.', '')) * 100; 
+                                            ?>%
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -144,8 +159,8 @@
                                         <span>$<?php echo $goal['current_amount']; ?> / $<?php echo $goal['target_amount']; ?></span>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                            role="progressbar" 
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
                                             style="width: <?php echo ($goal['current_amount'] / $goal['target_amount']) * 100; ?>%">
                                         </div>
                                     </div>
@@ -163,43 +178,39 @@
                     <div class="card-body">
                         <h5 class="card-title">All Transactions</h5>
                         <div class="table-responsive">
-                            <table class="table" id="transactionsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Category</th>
-                                        <th>Description</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach($transactions as $transaction): ?>
-                                    <tr>
-                                        <td><?php echo $transaction['transaction_date']; ?></td>
-                                        <td><span class="badge bg-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>"><?php echo $transaction['transaction_type']; ?></span></td>
-                                        <td><?php echo ucwords($transaction['category']); ?></td>
-                                        <td><?php echo $transaction['description'] || '-'; ?></td>
-                                        <td class="text-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>">
-                                            <?php echo $transaction['transaction_type'] === 'income' ? '+' : '-'; ?>$<?php echo $transaction['amount']; ?>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                            <?php if (empty($transactions)): ?>
+                                <p class="text-center text-muted">No transactions available for the selected period.</p>
+                            <?php else: ?>
+                                <table class="table" id="transactionsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Category</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($transactions as $transaction): ?>
+                                        <tr>
+                                            <td><?php echo $transaction['transaction_date']; ?></td>
+                                            <td><span class="badge bg-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>">
+                                                <?php echo $transaction['transaction_type']; ?></span></td>
+                                            <td><?php echo ucwords($transaction['category']); ?></td>
+                                            <td><?php echo $transaction['description'] ? $transaction['description'] : '-'; ?></td>
+                                            <td class="text-<?php echo $transaction['transaction_type'] === 'income' ? 'success' : 'danger'; ?>">
+                                                <?php echo $transaction['transaction_type'] === 'income' ? '+' : '-'; ?>$<?php echo $transaction['amount']; ?>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Savings Goals Progress</h5>
-                        <div id="goalsContainer"></div>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </div>
 
@@ -212,7 +223,6 @@
             $transactions->data_seek(0);
             
             $transactionRows = is_array($transactions) ? $transactions : $transactions->fetch_all(MYSQLI_ASSOC);
-
             $monthlyData = [];
             $expensesLabels = [];
             foreach ($transactionRows as $row) {
@@ -349,4 +359,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
