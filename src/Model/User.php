@@ -43,6 +43,13 @@ class User {
     public function getTransactionsById($id, $order, $limit, $filter, $startDate, $endDate) {
         $query = "SELECT * FROM transactions WHERE user_id = ?";
     
+        if($filter === null){
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        }
+
         // Adjust query based on the filter
         if ($filter === 'month') {
             $query .= " AND MONTH(transaction_date) = MONTH(CURRENT_DATE()) AND YEAR(transaction_date) = YEAR(CURRENT_DATE())";
@@ -54,7 +61,7 @@ class User {
             $query .= " AND transaction_date BETWEEN ? AND ?";
         }
     
-        $query .= " ORDER BY transaction_date $order LIMIT $limit";
+        $query .= " ORDER BY transaction_date " . $order . " LIMIT " . $limit;
         $stmt = $this->conn->prepare($query);
     
         if ($filter === 'custom' && $startDate && $endDate) {
@@ -64,7 +71,8 @@ class User {
         }
     
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        //return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $stmt->get_result();
     }
     
 

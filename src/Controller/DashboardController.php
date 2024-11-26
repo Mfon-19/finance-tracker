@@ -14,7 +14,7 @@ class DashboardController {
 
     public function showDashboard($id) {
         $user = $this->userModel->getUserById($id);
-        $transactions = $this->userModel->getTransactionsById($id, 'DESC');
+        $transactions = $this->userModel->getTransactionsById($id, 'DESC', null, null, null, null);
         $balance = $this->userModel->getCurrentBalanceById($id);
         $goals = $this->userModel->getGoalsById($id);
         require_once __DIR__ . '/../../src/View/dashboard.php';
