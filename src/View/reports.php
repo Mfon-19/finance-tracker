@@ -34,11 +34,11 @@
                                         <option value="custom" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'custom' ? 'selected' : ''; ?>>Custom Range</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 date-input" style="display: none;">
                                     <input type="date" class="form-control" name="start_date" id="start_date" 
                                            value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 date-input" style="display: none;">
                                     <input type="date" class="form-control" name="end_date" id="end_date" 
                                            value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
                                 </div>
@@ -356,6 +356,33 @@
                     cutout: '65%'
                 }
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelect = document.getElementById('filter');
+            const dateInputs = document.querySelectorAll('.date-input');
+            
+            function toggleDateInputs() {
+                const isCustom = filterSelect.value === 'custom';
+                dateInputs.forEach(input => {
+                    input.style.display = isCustom ? 'block' : 'none';
+                    const dateInput = input.querySelector('input');
+                    if (dateInput) {
+                        dateInput.required = isCustom;
+                    }
+                });
+            }
+
+            // Initial state
+            toggleDateInputs();
+
+            // Listen for changes
+            filterSelect.addEventListener('change', toggleDateInputs);
+
+            // If custom is selected on page load, show the date inputs
+            if (filterSelect.value === 'custom') {
+                toggleDateInputs();
+            }
         });
     </script>
 </body>
