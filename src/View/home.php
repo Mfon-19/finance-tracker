@@ -32,7 +32,7 @@
                         <a class="nav-link" href="/reports"><i class="fas fa-chart-bar me-1"></i> Reports </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                        <a class="nav-link" href="/contact"><i class="fas fa-envelope me-1"></i> Contact</a>
                     </li>
                 </ul>
             </div>

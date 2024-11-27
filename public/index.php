@@ -82,6 +82,16 @@ $router->map('POST', '/edit-goal', function() use ($conn) {
     $controller->editGoal($_POST['goal-id'], $_POST['amount'], $_POST['goal-name']);
 });
 
+$router->map('GET', '/contact', function() use ($conn){
+    $controller = new \App\Controller\ContactController($conn);
+    $controller->index();
+});
+
+$router->map('POST', '/post-contact', function() use($conn){
+    $controller = new \App\Controller\ContactController($conn);
+    $controller->addContact($_POST['full_name'], $_POST['email'], $_POST['phone_number'], $_POST['message']);
+});
+
 $match = $router->match();
 
 if($match) {

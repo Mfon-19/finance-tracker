@@ -196,4 +196,13 @@ class User {
             return false;
         }
     }
+
+    public function addContact($fullName, $email, $phoneNumber, $message){
+        $sql = "INSERT INTO contact_query (full_name, email, phone_number, message) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $fullName, $email, $phoneNumber, $message);
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
 }
