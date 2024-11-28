@@ -49,8 +49,8 @@ class ReportsController {
         $income = $this->user->getTotalIncomeById($id, $filter, $startDate, $endDate);
         $expenses = $this->user->getTotalExpensesById($id, $filter, $startDate, $endDate);
         $goals = $this->user->getGoalsById($id); // Assuming goals aren't time-filtered
-        // $topCategories = $this->user->getTopExpenseCategoriesById($id, $filter, $startDate, $endDate);
-        $topCategories = $this->user->getTopExpenseCategoriesById($id);
+        $topCategories = $this->user->getTopExpenseCategoriesById($id, $filter, $startDate, $endDate);
+        // $topCategories = $this->user->getTopExpenseCategoriesById($id);
         // Include any error message in the view
         require_once __DIR__ . '/../../src/View/reports.php';
     }

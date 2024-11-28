@@ -91,7 +91,7 @@
         <div class="container">
             <h2 class="mb-4">Ready to Start Your Financial Journey?</h2>
             <p class="lead mb-4">Join thousands of users who have already taken control of their finances</p>
-            <a href="dashboard.html" class="btn btn-light btn-lg">Start Now - It's Free!</a>
+            <a href="/dashboard" class="btn btn-light btn-lg">Start Now - It's Free!</a>
         </div>
     </section>
 
@@ -141,7 +141,7 @@
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="dashboard.html" class="text-white">Dashboard</a></li>
+                        <li><a href="/dashboard" class="text-white">Dashboard</a></li>
                         <li><a href="#features" class="text-white">Features</a></li>
                         <li><a href="#contact" class="text-white">Contact</a></li>
                     </ul>
