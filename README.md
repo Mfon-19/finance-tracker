@@ -19,4 +19,4 @@ Bootstrap, HTML
 ### Backend:
 PHP, JavaScript
 ### Database:
-MySql
+MySQL
